@@ -44,7 +44,7 @@ export const Header = () => {
             <div className="flex items-center gap-2">
               <Button variant="ghost" size="sm" asChild>
                 <a 
-                  href="https://github.com" 
+                  href="https://github.com/Hayshan56" 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="p-2"
@@ -96,7 +96,7 @@ export const Header = () => {
               </Button>
               <div className="flex items-center gap-2 mt-2">
                 <Button variant="ghost" size="sm" asChild>
-                  <a href="https://github.com" target="_blank" rel="noopener noreferrer">
+                  <a href="https://github.com/Hayshan56" target="_blank" rel="noopener noreferrer">
                     <Github className="w-4 h-4 mr-2" />
                     GitHub
                   </a>

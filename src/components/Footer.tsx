@@ -44,7 +44,7 @@ export const Footer = () => {
             <div className="flex gap-2">
               <Button variant="ghost" size="sm" asChild>
                 <a 
-                  href="https://github.com" 
+                  href="https://github.com/Hayshan56" 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="p-2"

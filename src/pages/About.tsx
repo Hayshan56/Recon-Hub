@@ -126,7 +126,7 @@ export default function About() {
                   asChild
                 >
                   <a 
-                    href="https://github.com" 
+                    href="https://github.com/Hayshan56" 
                     target="_blank" 
                     rel="noopener noreferrer"
                   >
