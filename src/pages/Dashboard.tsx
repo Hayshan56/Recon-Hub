@@ -1,19 +1,29 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Search, Download, Copy, CheckCircle, XCircle, Clock, ArrowLeft } from 'lucide-react';
+import { Search, Download, Copy, CheckCircle, XCircle, Clock, ArrowLeft, FileText } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
+import { Card } from '@/components/ui/card';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
+import { ScanHistorySidebar } from '@/components/ScanHistorySidebar';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { toast } from '@/hooks/use-toast';
+import { generatePDFReport } from '@/utils/pdfGenerator';
 
 interface ScanResult {
   subdomain: string;
   status: number;
   statusText: string;
+}
+
+interface ScanHistoryItem {
+  id: string;
+  domain: string;
+  timestamp: Date;
+  subdomainCount: number;
 }
 
 export default function Dashboard() {
@@ -24,6 +34,7 @@ export default function Dashboard() {
   const [progress, setProgress] = useState(0);
   const [results, setResults] = useState<ScanResult[]>([]);
   const [scanComplete, setScanComplete] = useState(false);
+  const [scanHistory, setScanHistory] = useState<ScanHistoryItem[]>([]);
 
   useEffect(() => {
     const initialDomain = searchParams.get('domain');
@@ -65,6 +76,16 @@ export default function Dashboard() {
 
     setIsScanning(false);
     setScanComplete(true);
+    
+    // Add to scan history
+    const newScan: ScanHistoryItem = {
+      id: Date.now().toString(),
+      domain: domainToScan,
+      timestamp: new Date(),
+      subdomainCount: mockResults.length
+    };
+    setScanHistory(prev => [newScan, ...prev.slice(0, 4)]); // Keep last 5 scans
+    
     toast({
       title: "Scan Complete",
       description: `Found ${mockResults.length} subdomains for ${domainToScan}`,
@@ -114,12 +135,31 @@ export default function Dashboard() {
     });
   };
 
+  const downloadPDFReport = () => {
+    generatePDFReport(domain, results);
+    toast({
+      title: "PDF Downloaded",
+      description: "Professional scan report generated",
+    });
+  };
+
+  const handleSelectScan = (selectedDomain: string) => {
+    setDomain(selectedDomain);
+    handleScan(selectedDomain);
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <Header />
       
       <main className="pt-24 pb-20">
-        <div className="container mx-auto px-4">
+        <div className="flex">
+          <ScanHistorySidebar 
+            scanHistory={scanHistory} 
+            onSelectScan={handleSelectScan}
+          />
+          
+          <div className="flex-1 container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -187,79 +227,72 @@ export default function Dashboard() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5 }}
                 >
-                  <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center justify-between mb-6">
                     <h2 className="text-xl font-semibold">
                       Results ({results.length} subdomains found)
                     </h2>
                     {scanComplete && (
-                      <Button
-                        onClick={exportToCSV}
-                        variant="outline"
-                        className="gap-2"
-                      >
-                        <Download className="w-4 h-4" />
-                        Export CSV
-                      </Button>
+                      <div className="flex gap-2">
+                        <Button
+                          onClick={downloadPDFReport}
+                          variant="default"
+                          className="gap-2 gradient-primary border-0 text-white"
+                        >
+                          <FileText className="w-4 h-4" />
+                          Download PDF Report
+                        </Button>
+                        <Button
+                          onClick={exportToCSV}
+                          variant="outline"
+                          className="gap-2"
+                        >
+                          <Download className="w-4 h-4" />
+                          Export CSV
+                        </Button>
+                      </div>
                     )}
                   </div>
 
-                  <div className="glass rounded-lg overflow-hidden">
-                    <div className="overflow-x-auto">
-                      <table className="w-full">
-                        <thead>
-                          <tr className="border-b border-border/50">
-                            <th className="text-left p-4 font-medium">Subdomain</th>
-                            <th className="text-left p-4 font-medium">Status</th>
-                            <th className="text-left p-4 font-medium">Status Text</th>
-                            <th className="text-left p-4 font-medium">Actions</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {results.map((result, index) => (
-                            <motion.tr
-                              key={result.subdomain}
-                              initial={{ opacity: 0, x: -20 }}
-                              animate={{ opacity: 1, x: 0 }}
-                              transition={{ duration: 0.3, delay: index * 0.1 }}
-                              className="border-b border-border/30 hover:bg-card/50 transition-colors"
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {results.map((result, index) => (
+                      <motion.div
+                        key={result.subdomain}
+                        initial={{ opacity: 0, y: 20, scale: 0.9 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        transition={{ duration: 0.4, delay: index * 0.1, ease: "easeOut" }}
+                      >
+                        <Card className="glass p-6 hover:shadow-lg transition-all duration-300 group hover:scale-105">
+                          <div className="flex items-start justify-between mb-4">
+                            <div className="flex items-center gap-2">
+                              {getStatusIcon(result.status)}
+                              <Badge 
+                                variant="outline" 
+                                className={`${getStatusColor(result.status)} border-current`}
+                              >
+                                {result.status}
+                              </Badge>
+                            </div>
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              onClick={() => copyToClipboard(result.subdomain)}
+                              className="gap-2 opacity-0 group-hover:opacity-100 transition-opacity"
                             >
-                              <td className="p-4">
-                                <div className="flex items-center gap-2">
-                                  <code className="text-sm bg-accent/10 px-2 py-1 rounded">
-                                    {result.subdomain}
-                                  </code>
-                                </div>
-                              </td>
-                              <td className="p-4">
-                                <div className="flex items-center gap-2">
-                                  {getStatusIcon(result.status)}
-                                  <Badge 
-                                    variant="outline" 
-                                    className={`${getStatusColor(result.status)} border-current`}
-                                  >
-                                    {result.status}
-                                  </Badge>
-                                </div>
-                              </td>
-                              <td className="p-4 text-muted-foreground">
-                                {result.statusText}
-                              </td>
-                              <td className="p-4">
-                                <Button
-                                  size="sm"
-                                  variant="ghost"
-                                  onClick={() => copyToClipboard(result.subdomain)}
-                                  className="gap-2"
-                                >
-                                  <Copy className="w-3 h-3" />
-                                  Copy
-                                </Button>
-                              </td>
-                            </motion.tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
+                              <Copy className="w-3 h-3" />
+                            </Button>
+                          </div>
+                          
+                          <div className="space-y-2">
+                            <code className="text-sm bg-accent/10 px-3 py-2 rounded-lg block break-all font-mono">
+                              {result.subdomain}
+                            </code>
+                            <p className="text-sm text-muted-foreground">
+                              {result.statusText}
+                            </p>
+                          </div>
+                        </Card>
+                      </motion.div>
+                    ))}
                   </div>
                 </motion.div>
               )}
@@ -275,6 +308,7 @@ export default function Dashboard() {
               )}
             </div>
           </motion.div>
+          </div>
         </div>
       </main>
 

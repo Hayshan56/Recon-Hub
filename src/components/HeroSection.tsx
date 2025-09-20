@@ -4,7 +4,7 @@ import { Search, ArrowRight, Shield, Zap, Globe } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useNavigate } from 'react-router-dom';
-import dashboardMockup from '@/assets/dashboard-mockup.png';
+
 
 export const HeroSection = () => {
   const [domain, setDomain] = useState('');
@@ -111,22 +111,57 @@ export const HeroSection = () => {
             </div>
           </motion.div>
 
-          {/* Dashboard mockup */}
+          {/* Animated Radar Illustration */}
           <motion.div
-            className="relative max-w-4xl mx-auto"
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
+            className="relative max-w-2xl mx-auto"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1, delay: 0.6, ease: "easeOut" }}
           >
-            <div className="glass rounded-xl p-4 border border-border/50">
-              <img 
-                src={dashboardMockup} 
-                alt="ReconHub Dashboard" 
-                className="w-full rounded-lg shadow-2xl"
+            <div className="relative w-80 h-80 mx-auto">
+              {/* Radar circles */}
+              <div className="absolute inset-0 rounded-full border-2 border-accent/20 animate-pulse"></div>
+              <div className="absolute inset-4 rounded-full border border-accent/30 animate-pulse" style={{ animationDelay: '0.5s' }}></div>
+              <div className="absolute inset-8 rounded-full border border-accent/40 animate-pulse" style={{ animationDelay: '1s' }}></div>
+              
+              {/* Scanning beam */}
+              <motion.div
+                className="absolute top-1/2 left-1/2 w-2 origin-bottom"
+                style={{ height: '160px', transformOrigin: 'bottom center' }}
+                animate={{ rotate: 360 }}
+                transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+              >
+                <div className="w-full h-full bg-gradient-to-t from-accent to-transparent opacity-60"></div>
+              </motion.div>
+              
+              {/* Center dot */}
+              <div className="absolute top-1/2 left-1/2 w-3 h-3 bg-accent rounded-full transform -translate-x-1/2 -translate-y-1/2"></div>
+              
+              {/* Detected points */}
+              <motion.div
+                className="absolute top-16 right-20 w-2 h-2 bg-primary rounded-full"
+                animate={{ scale: [1, 1.5, 1], opacity: [0.5, 1, 0.5] }}
+                transition={{ duration: 2, repeat: Infinity }}
+              />
+              <motion.div
+                className="absolute bottom-20 left-16 w-2 h-2 bg-primary rounded-full"
+                animate={{ scale: [1, 1.5, 1], opacity: [0.5, 1, 0.5] }}
+                transition={{ duration: 2, repeat: Infinity, delay: 0.7 }}
+              />
+              <motion.div
+                className="absolute top-32 left-24 w-2 h-2 bg-primary rounded-full"
+                animate={{ scale: [1, 1.5, 1], opacity: [0.5, 1, 0.5] }}
+                transition={{ duration: 2, repeat: Infinity, delay: 1.4 }}
               />
             </div>
-            <div className="absolute -top-4 -left-4 w-8 h-8 rounded-full bg-accent animate-pulse-glow"></div>
-            <div className="absolute -bottom-4 -right-4 w-6 h-6 rounded-full bg-primary animate-pulse-glow" style={{ animationDelay: '1s' }}></div>
+            
+            <motion.p
+              className="text-center text-sm text-muted-foreground mt-6"
+              animate={{ opacity: [0.5, 1, 0.5] }}
+              transition={{ duration: 2, repeat: Infinity }}
+            >
+              Scanning for subdomains...
+            </motion.p>
           </motion.div>
         </div>
       </div>
