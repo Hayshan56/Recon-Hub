@@ -1,73 +1,189 @@
-# Welcome to your Lovable project
+# ReconHub - Open-Source Recon for Everyone
 
-## Project info
+<div align="center">
+  <img src="src/assets/reconhub-logo.png" alt="ReconHub Logo" width="120" height="120">
+  
+  <h3>Free, open-source reconnaissance platform for bug bounty hunters and cybersecurity students</h3>
+  
+  [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+  [![React](https://img.shields.io/badge/React-18.3.1-blue.svg)](https://reactjs.org/)
+  [![TypeScript](https://img.shields.io/badge/TypeScript-Latest-3178c6.svg)](https://www.typescriptlang.org/)
+  [![TailwindCSS](https://img.shields.io/badge/TailwindCSS-Latest-38bdf8.svg)](https://tailwindcss.com/)
+</div>
 
-**URL**: https://lovable.dev/projects/d48f1092-23f4-43e9-93ad-c3eaeb85974e
+## 🎯 Features
 
-## How can I edit this code?
+- **Lightning Fast Subdomain Discovery** - Leverage multiple data sources including SecurityTrails and AlienVault OTX
+- **Real-time Status Checking** - Instantly check HTTP status codes for discovered subdomains
+- **Export to CSV** - Download your reconnaissance results for further analysis
+- **Open Source Security** - Fully transparent codebase hosted on GitHub
+- **No Installation Required** - Web-based platform accessible from anywhere
+- **Beautiful Modern UI** - Premium SaaS-style interface with glassmorphism and smooth animations
 
-There are several ways of editing your application.
+## 🚀 Live Demo
 
-**Use Lovable**
+Visit [ReconHub](https://yourdeployedurl.com) to try it out!
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/d48f1092-23f4-43e9-93ad-c3eaeb85974e) and start prompting.
+## 🛠️ Tech Stack
 
-Changes made via Lovable will be committed automatically to this repo.
+### Frontend
+- **React 18** with TypeScript for type safety
+- **TailwindCSS** for beautiful, responsive styling
+- **Framer Motion** for smooth animations
+- **Shadcn/UI** for accessible component library
+- **Vite** for lightning-fast development
 
-**Use your preferred IDE**
+### Backend (Separate Repository)
+- **FastAPI** (Python) providing `/scan` endpoint
+- **SecurityTrails API** for comprehensive subdomain data
+- **AlienVault OTX API** for additional reconnaissance data
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+## 📦 Installation & Development
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+### Prerequisites
+- Node.js 18+ and npm
+- Git
 
-Follow these steps:
+### Frontend Setup
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+```bash
+# Clone the repository
+git clone https://github.com/yourusername/reconhub.git
+cd reconhub
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+# Install dependencies
+npm install
 
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Start development server
 npm run dev
+
+# Build for production
+npm run build
 ```
 
-**Edit a file directly in GitHub**
+## 🎨 Design System
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+ReconHub features a premium SaaS-style design with:
 
-**Use GitHub Codespaces**
+- **Color Palette**: Purple and cyan gradients with dark theme
+- **Typography**: Clean, modern fonts with gradient text effects
+- **Components**: Glassmorphic cards with backdrop blur effects
+- **Animations**: Smooth Framer Motion transitions and micro-interactions
+- **Responsive**: Mobile-first design that works on all devices
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## 🔧 Configuration
 
-## What technologies are used for this project?
+The application uses environment variables for API configuration:
 
-This project is built with:
+```env
+# API Configuration (Backend)
+SECURITY_TRAILS_API_KEY=your_api_key_here
+ALIEN_VAULT_API_KEY=your_api_key_here
+```
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+## 📊 API Documentation
 
-## How can I deploy this project?
+### Scan Endpoint
+```
+POST /api/scan
+Content-Type: application/json
 
-Simply open [Lovable](https://lovable.dev/projects/d48f1092-23f4-43e9-93ad-c3eaeb85974e) and click on Share -> Publish.
+{
+  "domain": "example.com"
+}
+```
 
-## Can I connect a custom domain to my Lovable project?
+**Response:**
+```json
+{
+  "domain": "example.com",
+  "subdomains": [
+    {
+      "subdomain": "www.example.com",
+      "status": 200,
+      "statusText": "OK"
+    },
+    {
+      "subdomain": "api.example.com", 
+      "status": 200,
+      "statusText": "OK"
+    }
+  ],
+  "total": 2,
+  "scan_time": "2024-01-15T10:30:00Z"
+}
+```
 
-Yes, you can!
+## 🚀 Deployment
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+### Frontend (Render Static Site)
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+1. Connect your GitHub repository to Render
+2. Set build command: `npm run build`
+3. Set publish directory: `dist`
+4. Deploy!
+
+### Backend (Render Web Service)
+
+1. Create a new Web Service on Render
+2. Connect your backend repository
+3. Set build command: `pip install -r requirements.txt`
+4. Set start command: `uvicorn app.main:app --host 0.0.0.0 --port $PORT`
+5. Add environment variables for API keys
+6. Deploy!
+
+## 🤝 Contributing
+
+ReconHub is open-source and welcomes contributions from the cybersecurity community!
+
+### How to Contribute
+
+1. **Fork the repository**
+2. **Create a feature branch**: `git checkout -b feature/amazing-feature`
+3. **Commit your changes**: `git commit -m 'Add amazing feature'`
+4. **Push to the branch**: `git push origin feature/amazing-feature`
+5. **Open a Pull Request**
+
+### Contribution Areas
+- 🐛 Bug fixes and improvements
+- ✨ New reconnaissance features
+- 📚 Documentation enhancements
+- 🎨 UI/UX improvements
+- 🔒 Security enhancements
+
+## 👨‍💻 About the Creator
+
+ReconHub is built by **Hayshan Kannan**, a 14-year-old cybersecurity enthusiast from Malaysia:
+
+- 🏆 **#3 Ranking** in Malaysia's cybersecurity community
+- 📚 **100+ Labs Completed** in hands-on cybersecurity training
+- 🔓 **2+ Years** of experience in ethical hacking and bug bounty hunting
+- 🌟 **Open Source Advocate** committed to democratizing cybersecurity tools
+
+### Connect with the Creator
+- **LinkedIn**: [Hayshan Kannan](https://www.linkedin.com/in/hayshan-kannan-ab00b0354?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app)
+- **GitHub**: [View Profile](https://github.com/yourusername)
+
+## 📝 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- **SecurityTrails** and **AlienVault OTX** for providing powerful APIs
+- **Shadcn/UI** for the beautiful component library
+- **Framer Motion** for smooth animations
+- **The cybersecurity community** for inspiration and support
+
+## 📞 Support
+
+- 🐛 **Bug Reports**: [Create an Issue](https://github.com/yourusername/reconhub/issues)
+- 💡 **Feature Requests**: [Discussions](https://github.com/yourusername/reconhub/discussions)
+- 📧 **Email**: hayshan@example.com
+
+---
+
+<div align="center">
+  <p>⭐ If you find ReconHub useful, please consider giving it a star! ⭐</p>
+  <p>Built with ❤️ for the cybersecurity community</p>
+</div>

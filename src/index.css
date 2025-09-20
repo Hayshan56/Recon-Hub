@@ -2,39 +2,53 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* ReconHub Design System - Premium SaaS Aesthetic */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Premium Brand Colors */
+    --background: 222 84% 4.9%;
+    --foreground: 210 40% 98%;
+    
+    /* Brand Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(259 94% 51%) 0%, hsl(202 100% 50%) 50%, hsl(180 100% 50%) 100%);
+    --gradient-secondary: linear-gradient(135deg, hsl(259 94% 51% / 0.1) 0%, hsl(202 100% 50% / 0.1) 100%);
+    --gradient-hero: linear-gradient(135deg, hsl(240 100% 3%) 0%, hsl(259 94% 8%) 50%, hsl(240 100% 3%) 100%);
+    
+    /* Glassmorphism */
+    --glass-bg: hsl(259 94% 51% / 0.05);
+    --glass-border: hsl(259 94% 51% / 0.2);
+    --glass-backdrop: blur(16px);
+    
+    /* Brand Colors */
+    --primary: 259 94% 51%;
+    --primary-glow: 259 94% 61%;
+    --primary-dark: 259 94% 41%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 222 84% 7%;
+    --card-foreground: 210 40% 98%;
+    --card-glass: hsl(222 84% 7% / 0.8);
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 222 84% 7%;
+    --popover-foreground: 210 40% 98%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    --primary-foreground: 222 84% 4.9%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 259 94% 51%;
+    --accent-foreground: 210 40% 98%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 259 94% 51%;
 
     --radius: 0.5rem;
 
@@ -55,9 +69,9 @@ All colors MUST be HSL.
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+  .light {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
 
     --card: 222.2 84% 4.9%;
     --card-foreground: 210 40% 98%;
@@ -100,6 +114,43 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans antialiased;
+    background: var(--gradient-hero);
+  }
+  
+  /* Custom Glass Effect */
+  .glass {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: var(--glass-backdrop);
+    -webkit-backdrop-filter: var(--glass-backdrop);
+  }
+  
+  /* Premium Gradients */
+  .gradient-primary {
+    background: var(--gradient-primary);
+  }
+  
+  .gradient-text {
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  /* Smooth animations */
+  .smooth-appear {
+    animation: smoothAppear 0.8s ease-out forwards;
+  }
+  
+  @keyframes smoothAppear {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 }
